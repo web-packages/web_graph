@@ -13,10 +13,10 @@ export class GraphDataState {
     ) {
         /** @type {GraphData} */
         this.data = data;
-        if (data == null || data instanceof! GraphData) {
+        if (data == null || data instanceof GraphData == false) {
             throw new Error("The parameter [data] was not given correctly.");
         }
-
+        
         /** @type {number} */
         this.index = index; // unique index.
     }

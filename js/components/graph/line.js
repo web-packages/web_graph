@@ -9,7 +9,7 @@ class LineGraphDataState extends GraphDataState {
      * @param {GraphDataState} parent
      */
     constructor(parent) {
-        this.parent = parent;
+        super(parent.data, parent.index);
     }
 
     /**
@@ -36,7 +36,7 @@ class LineGraphElement extends HTMLElement {
      * @returns {number}
      */
     get stateLength() {
-        return this.stateLength;
+        return this.states.length;
     }
 
     /**
@@ -45,6 +45,10 @@ class LineGraphElement extends HTMLElement {
     attach(data) {
         const index = this.stateLength;
         const state = new LineGraphDataState(data.createState(index));
+        state.data.addListener((value) => {
+            // change value.
+            console.log(value);
+        });
 
         this.states.push(state);
     }
@@ -54,6 +58,10 @@ class LineGraphElement extends HTMLElement {
      * @param {DOMRect} r
     */
     draw(c, r) {
+        if (this.stateLength > 1) {
+            throw new Error("The attached graph data states of line must be at least one.");
+        }
+
         c.beginPath();
         c.strokeStyle = "rgb(0, 100, 255)";
         c.lineWidth = 3;
