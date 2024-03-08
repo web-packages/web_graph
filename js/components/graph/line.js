@@ -91,7 +91,13 @@ class LineGraphElement extends GraphElement {
     }
     
     connectedCallback() {
-        let initStateFunc = this.getAttribute("initstate");
+        // A init-state function is provided to attach graph-data state
+        // directly from script without initializing the graph-data state through
+        // the initial HTML element.
+        //
+        let initStateFunc = this.getAttribute("initstate")
+                         ?? this.getAttribute("initState");
+
         if (initStateFunc != null) {
             eval(initStateFunc); // for initialize graph datas.
         }
@@ -101,6 +107,11 @@ class LineGraphElement extends GraphElement {
         const shadow = this.attachShadow({ mode: "open" });
               shadow.appendChild(this.canvas = this.createCanvas());
         
+        // Initializes all graph-data state by iterating over children
+        // in this element.
+        //
+        // See also: All children must be <graph-data> elements.
+        //
         for (const /** @type {GraphDataElement} */ child of this.children) {
             if (child instanceof GraphDataElement == false) {
                 throw "All children of graph elements must only <graph-data> elements defined.";
@@ -108,6 +119,11 @@ class LineGraphElement extends GraphElement {
         
             this.attach(child.data);
         }
+        
+        const observer = new MutationObserver(list, observer => {
+            
+        });
+        observer.observe(this, {childList})
     }
 }
 

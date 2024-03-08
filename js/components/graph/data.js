@@ -22,7 +22,7 @@ export class GraphData {
         this.key = key;
 
         /** @type {number} */
-        this._value = value; 
+        this._value = value;
         if (isNaN(value) || typeof value != "number") {
             throw new Error("The value of line graph must always be an number.");
         }
@@ -89,7 +89,7 @@ export class GraphDataElement extends HTMLElement {
         /** @type {number} */
         const value = Number(this.getAttribute("value"));
         if (value == null) {
-            throw new Error("Required attribute value not defined in <graph-data> element.");
+            throw new Error("Required attribute 'value' not defined in <graph-data> element.");
         }
 
         // The element attributes to an instance.
@@ -105,9 +105,12 @@ export class GraphDataElement extends HTMLElement {
      * @param {string} newValue
      */
     attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue != null && oldValue != newValue) {
+        if (oldValue != null && oldValue != newValue) { 
             if (name == "key") {
-                throw new Error("The key, which is a unique identifier of the graph data, cannot be changed.");
+                throw new Error(
+                    "The key, which is a unique identifier of the graph data " +
+                    "cannot be changed."
+                );
             }
 
             this.data.value = newValue;

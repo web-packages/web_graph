@@ -5,7 +5,7 @@ import { GraphData } from "./data.js";
 export class GraphDataState {
     /**
      * @param {GraphData} data
-     * @param {number} index 
+     * @param {number} index
     */
     constructor(
         data,
