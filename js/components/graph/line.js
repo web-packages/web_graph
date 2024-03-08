@@ -1,6 +1,7 @@
 import { SharpCanvasElement } from "../canvas/element.js";
 import { GraphData, GraphDataElement } from "./data.js";
 import { GraphDataState } from "./data_state.js";
+import { GraphElement } from "./element.js";
 
 
 
@@ -22,7 +23,7 @@ class LineGraphDataState extends GraphDataState {
     }
 }
 
-class LineGraphElement extends HTMLElement {
+class LineGraphElement extends GraphElement {
     constructor() {
         super();
 
@@ -47,10 +48,14 @@ class LineGraphElement extends HTMLElement {
         const state = new LineGraphDataState(data.createState(index));
         state.data.addListener((value) => {
             // change value.
-            console.log(value);
+            console.log(state.data.key + " = " + value);
         });
 
         this.states.push(state);
+    }
+
+    detech(data) {
+        this.states = this.states.filter(state => state.data === data);
     }
 
     /**
@@ -100,7 +105,7 @@ class LineGraphElement extends HTMLElement {
             if (child instanceof GraphDataElement == false) {
                 throw "All children of graph elements must only <graph-data> elements defined.";
             }
-            
+        
             this.attach(child.data);
         }
     }

@@ -32,12 +32,15 @@ export class SharpCanvasElement extends HTMLElement {
     }
 
     /**
+     * Returns 2D during canvas context.
+     * 
      * @returns {CanvasRenderingContext2D}
     */
     getContext2D() {
         return this.raw.getContext("2d");
     }
 
+    // Returns the canvas element.
     createRaw() {
         const canvas = document.createElement("canvas");
         canvas.style.width  = this.style.width;

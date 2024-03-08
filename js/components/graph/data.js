@@ -1,6 +1,5 @@
 import { GraphDataState } from "./data_state.js";
 
-
 /**
  * @typedef {(value: number) => void} GraphDataListener
  */
@@ -82,7 +81,7 @@ export class GraphData {
 
 export class GraphDataElement extends HTMLElement {
     static observedAttributes = ["key", "value"];
-
+    
     connectedCallback() {
         /** @type {any} */
         const key = this.getAttribute("key");
@@ -90,13 +89,21 @@ export class GraphDataElement extends HTMLElement {
         /** @type {number} */
         const value = Number(this.getAttribute("value"));
         if (value == null) {
-            throw new Error("Required property value not defined in <graph-data> element.");
+            throw new Error("Required attribute value not defined in <graph-data> element.");
         }
-        
+
         // The element attributes to an instance.
         this.data = new GraphData(key, value);
     }
 
+    /**
+     * Called when a attributes of this element changes,
+     * And `key` attribute value must not be changed.
+     * 
+     * @param {string} name
+     * @param {string} oldValue
+     * @param {string} newValue
+     */
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue != null && oldValue != newValue) {
             if (name == "key") {
