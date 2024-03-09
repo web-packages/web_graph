@@ -49,13 +49,17 @@ export class SharpCanvasElement extends HTMLElement {
         return canvas;
     }
 
+    disconnectedCallback() {
+        this.observer.disconnect();
+    }
+
     connectedCallback() {
         this.style.display = "flex";
 
         // This observer callback is called not only when the resized,
         // but also when the initial size measured.
         //
-        const observer = new ResizeObserver(_ => {
+        this.observer = new ResizeObserver(_ => {
             const context = this.getContext2D();
             const ract    = this.raw.getBoundingClientRect();
             const ppi     = devicePixelRatio || 1;
@@ -68,7 +72,7 @@ export class SharpCanvasElement extends HTMLElement {
             if (this.draw) this.draw(context, ract);
         });
         
-        observer.observe(this.raw = this.createRaw());
+        this.observer.observe(this.raw = this.createRaw());
         
         // Attach the created raw canvas to this element tree.
         const shadow = this.attachShadow({ mode: "closed" });
