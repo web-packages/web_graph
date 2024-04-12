@@ -1,46 +1,33 @@
 
-/**
- * @typedef {(context: CanvasRenderingContext2D, ract: DOMRect) => void} CanvasDrawCallback
- */
+type CanvasDrawCallback = (context: CanvasRenderingContext2D, ract: DOMRect) => void;
 
 export class SharpCanvasElement extends HTMLElement {
-    constructor() {
-        super(); // is required called.
-    }
+    private _drawCallback: CanvasDrawCallback;
+    
+    raw: HTMLCanvasElement;
+    observer: ResizeObserver;
 
-    /**
-     * This getter returns draw callback.
-     * 
-     * @returns {CanvasDrawCallback}
-     */
-    get draw() {
-        return this._draw;
+    /** Returns draw callback. */
+    get draw(): CanvasDrawCallback {
+        return this._drawCallback;
     }
     
-    /**
-     * This setter defines given draw callback.
-     * 
-     * @type {CanvasDrawCallback}
-     */
-    set draw(func) {
-        this._draw = func;
+    /** Sets given draw callback. */
+    set draw(callback: CanvasDrawCallback) {
+        this._drawCallback = callback;
 
         // Must be redraw when the canvas is already attached to element tree.
         if (this.raw !== undefined) {
-            this._draw(this.getContext2D(), this.raw.getBoundingClientRect());
+            this._drawCallback(this.getContext2D(), this.raw.getBoundingClientRect());
         }
     }
 
-    /**
-     * Returns 2D during canvas context.
-     * 
-     * @returns {CanvasRenderingContext2D}
-    */
-    getContext2D() {
+    /** Returns 2D during canvas context. */
+    getContext2D(): CanvasRenderingContext2D {
         return this.raw.getContext("2d");
     }
 
-    // Returns the canvas element.
+    /** Returns the canvas element. */
     createRaw() {
         const canvas = document.createElement("canvas");
         canvas.style.width  = this.style.width;

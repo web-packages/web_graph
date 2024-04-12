@@ -1,48 +1,34 @@
-import { SharpCanvasElement } from "../canvas/element.js";
-import { GraphData, GraphDataElement } from "./data.js";
-import { GraphDataState } from "./data_state.js";
-import { GraphElement } from "./element.js";
+import { SharpCanvasElement } from "./canvas";
+import { GraphData, GraphDataElement } from "../graph_data";
+import { GraphDataState } from "../graph_data_state";
+import { GraphElement } from "./graph";
 
 class LineGraphDataState extends GraphDataState {
-    /**
-     * @param {GraphDataState} parent
-     */
-    constructor(parent) {
+    constructor(parent: GraphDataState) {
         super(parent.data, parent.index);
     }
 
-    /**
-     * @param {CanvasRenderingContext2D} c
-     * @param {number} lower - x point
-     * @param {number} upper - x point
-     * @param {number} maxAmount
-     */
-    draw(c, minX, maxX, maxAmount) {
+    draw(
+        c: CanvasRenderingContext2D,
+        minX: number,
+        maxX: number,
+        maxAmount: number
+    ) {
         throw new Error("draw() function not implemented.");
     }
 }
 
 class LineGraphElement extends GraphElement {
-    constructor() {
-        super();
+    states: LineGraphDataState[] = [];
+    observer: MutationObserver;
+    canvas: SharpCanvasElement;
 
-        /** @type {LineGraphDataState[]} */
-        this.states = [];
-    }
-
-    /**
-     * Returns the total length of the attached graph states.
-     * 
-     * @returns {number}
-     */
-    get stateLength() {
+    /** Returns the total length of the attached graph states. */
+    get stateLength(): number {
         return this.states.length;
     }
 
-    /**
-     * @param {GraphData} data 
-     */
-    attach(data) {
+    attach(data: GraphData) {
         const index = this.stateLength;
         const state = new LineGraphDataState(data.createState(index));
         state.data.addListener((value) => {
@@ -53,15 +39,11 @@ class LineGraphElement extends GraphElement {
         this.states.push(state);
     }
 
-    detech(data) {
+    detech(data: GraphData) {
         this.states = this.states.filter(state => state.data !== data);
     }
 
-    /**
-     * @param {CanvasRenderingContext2D} c
-     * @param {DOMRect} r
-    */
-    draw(c, r) {
+    draw(c: CanvasRenderingContext2D, r: DOMRect) {
         if (this.stateLength < 1) {
             throw new Error("The attached graph-data states for a line must be at least one.");
         }
@@ -79,11 +61,8 @@ class LineGraphElement extends GraphElement {
         c.stroke();
     }
 
-    /**
-     * @returns {SharpCanvasElement}
-    */
-    createCanvas() {
-        const canvas = document.createElement("sharp-canvas");
+    createCanvas(): SharpCanvasElement {
+        const canvas = document.createElement("sharp-canvas") as SharpCanvasElement;
         canvas.style.width  = this.getAttribute("width") ?? "100%";
         canvas.style.height = this.getAttribute("height") ?? "250px";
 
@@ -129,8 +108,7 @@ class LineGraphElement extends GraphElement {
         }
         
         this.observer = new MutationObserver((records, observer) => {
-            /** @type {(target: GraphDataElement) => void} */
-            const _handleAttached = (target) => {
+            const _handleAttached = (target: GraphDataElement) => {
                 if (target instanceof GraphDataElement == false) {
                     throw new Error("The element attached to this element is not a <graph-data> element.");
                 }
@@ -138,8 +116,7 @@ class LineGraphElement extends GraphElement {
                 this.attach(target.data);
             }
             
-            /** @type {(target: GraphDataElement) => void} */
-            const _handleDetached = (target) => {
+            const _handleDetached = (target: GraphDataElement) => {
                 if (target instanceof GraphDataElement == false) {
                     throw new Error("The element detached to this element is not a <graph-data> element.");
                 }

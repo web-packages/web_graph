@@ -1,27 +1,21 @@
-import { GraphDataState } from "./data_state.js";
+import { GraphDataState } from "./graph_data_state";
 
-/**
- * @typedef {(value: number) => void} GraphDataListener
- */
+type GraphDataListener = (value: number) => void;
 
 export class GraphData {
-    /**
-     * @param {any} key 
-     * @param {number} value 
-     */
+    private _value: number;
+    private listeners: GraphDataListener[];
+
     constructor(
-        key,
-        value
+        public key: any,
+        value: number
     ) {
         /**
          * If the value is null,
          * the graph element identifies the value based on the unique index of the data.
-         * 
-         * @type {any}
          */
         this.key = key;
 
-        /** @type {number} */
         this._value = value;
         if (isNaN(value) || typeof value != "number") {
             throw new Error("The value of line graph must always be an number.");
@@ -31,18 +25,14 @@ export class GraphData {
         this.listeners = [];
     }
 
-    set value(newValue) {
+    set value(newValue: number) {
         this.notifyListeners(this._value = newValue);
     }
 
     get value() { return this._value; }
 
-    /**
-     * Registers a callback that is called when the value is updated.
-     * 
-     * @param {GraphDataListener} listener
-     */
-    addListener(listener) {
+    /** Registers a callback that is called when the value is updated.  */
+    addListener(listener: GraphDataListener) {
         if (this.listeners.includes(listener)) {
             throw new Error("A given listener is already registered.");
         }
@@ -50,12 +40,8 @@ export class GraphData {
         this.listeners.push(listener);
     }
 
-    /**
-     * Unregister a registered callback in this graph data.
-     * 
-     * @param {GraphDataListener} listener
-     */
-    removeListener(listener) {
+    /** Unregister a registered callback in this graph data. */
+    removeListener(listener: GraphDataListener) {
         if (!this.listeners.includes(listener)) {
             throw new Error("A given listener is already not registered.");
         }
@@ -63,31 +49,23 @@ export class GraphData {
         this.listeners = this.listeners.filter(e => e !== listener);
     }
 
-    /**
-     * @param {number} newValue
-     */
-    notifyListeners(newValue) {
+    notifyListeners(newValue: number) {
         this.listeners.forEach(func => func(newValue));
     }
 
-    /**
-     * @param {number} index
-     * @returns {GraphDataState}
-     */
-    createState(index) {
+    createState(index: number): GraphDataState {
         return new GraphDataState(this, index);
     }
 }
 
 export class GraphDataElement extends HTMLElement {
     static observedAttributes = ["key", "value"];
+    data: GraphData;
     
     connectedCallback() {
-        /** @type {any} */
-        const key = this.getAttribute("key");
+        const key: any = this.getAttribute("key");
         
-        /** @type {number} */
-        const value = Number(this.getAttribute("value"));
+        const value: number = Number(this.getAttribute("value"));
         if (value == null) {
             throw new Error("Required attribute 'value' not defined in <graph-data> element.");
         }
@@ -99,12 +77,12 @@ export class GraphDataElement extends HTMLElement {
     /**
      * Called when a attributes of this element changes,
      * And `key` attribute value must not be changed.
-     * 
-     * @param {string} name
-     * @param {string} oldValue
-     * @param {string} newValue
      */
-    attributeChangedCallback(name, oldValue, newValue) {
+    attributeChangedCallback(
+        name: string,
+        oldValue: number,
+        newValue: number
+    ) {
         if (oldValue != null && oldValue != newValue) { 
             if (name == "key") {
                 throw new Error(
