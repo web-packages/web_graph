@@ -3,7 +3,7 @@ import { GraphData, GraphDataElement } from "../graph_data";
 import { GraphDataState } from "../graph_data_state";
 import { GraphElement } from "./graph";
 
-class LineGraphDataState extends GraphDataState {
+export class LineGraphDataState extends GraphDataState {
     constructor(parent: GraphDataState) {
         super(parent.data, parent.index);
     }
@@ -14,11 +14,13 @@ class LineGraphDataState extends GraphDataState {
         maxX: number,
         maxAmount: number
     ) {
-        throw new Error("draw() function not implemented.");
+        c.canvas.width;
+        c.canvas.height;
+        // throw new Error("draw() function not implemented.");
     }
 }
 
-class LineGraphElement extends GraphElement {
+export class LineGraphElement extends GraphElement {
     states: LineGraphDataState[] = [];
     observer: MutationObserver;
     canvas: SharpCanvasElement;
@@ -86,7 +88,7 @@ class LineGraphElement extends GraphElement {
                          ?? this.getAttribute("initState");
 
         if (initStateFunc != null) {
-            eval(initStateFunc); // for initialize graph datas.
+            (new Function(initStateFunc))(); // for initialize graph datas.
         }
 
         this.style.display = "flex";
