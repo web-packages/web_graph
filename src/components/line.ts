@@ -14,8 +14,8 @@ export class LineGraphDataState extends GraphDataState {
         maxX: number,
         maxAmount: number
     ) {
-        c.canvas.width;
-        c.canvas.height;
+        const width = c.canvas.width;
+        const height = c.canvas.height;
         // throw new Error("draw() function not implemented.");
     }
 }
@@ -57,6 +57,7 @@ export class LineGraphElement extends GraphElement {
         c.strokeStyle = "rgb(0, 100, 255)";
         c.lineWidth = 3;
         c.lineCap = "round";
+        c.lineJoin = "round";
         c.moveTo(15, 15);
         c.lineTo((r.width / 2) - 15, r.height - 15);
         c.lineTo(r.width - 15, r.height / 2)
@@ -65,7 +66,7 @@ export class LineGraphElement extends GraphElement {
 
     createCanvas(): SharpCanvasElement {
         const canvas = document.createElement("sharp-canvas") as SharpCanvasElement;
-        canvas.style.width  = this.getAttribute("width") ?? "100%";
+        canvas.style.width  = this.getAttribute("width")  ?? "100%";
         canvas.style.height = this.getAttribute("height") ?? "250px";
 
         // Why arrow function wrapping is to allow these member variables to be
@@ -101,15 +102,15 @@ export class LineGraphElement extends GraphElement {
         //
         // See also: All children must be <graph-data> elements.
         //
-        for (const /** @type {GraphDataElement} */ child of this.children) {
+        for (const child of this.children) {
             if (child instanceof GraphDataElement == false) {
                 throw "All children of graph elements must only <graph-data> elements defined.";
             }
 
             this.attach(child.data);
         }
-        
-        this.observer = new MutationObserver((records, observer) => {
+
+        this.observer = new MutationObserver((records, _) => {
             const _handleAttached = (target: GraphDataElement) => {
                 if (target instanceof GraphDataElement == false) {
                     throw new Error("The element attached to this element is not a <graph-data> element.");
@@ -117,7 +118,7 @@ export class LineGraphElement extends GraphElement {
 
                 this.attach(target.data);
             }
-            
+
             const _handleDetached = (target: GraphDataElement) => {
                 if (target instanceof GraphDataElement == false) {
                     throw new Error("The element detached to this element is not a <graph-data> element.");

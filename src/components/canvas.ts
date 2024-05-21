@@ -3,7 +3,7 @@ type CanvasDrawCallback = (context: CanvasRenderingContext2D, ract: DOMRect) => 
 
 export class SharpCanvasElement extends HTMLElement {
     private _drawCallback: CanvasDrawCallback;
-    
+
     raw: HTMLCanvasElement;
     observer: ResizeObserver;
 
@@ -11,7 +11,7 @@ export class SharpCanvasElement extends HTMLElement {
     get draw(): CanvasDrawCallback {
         return this._drawCallback;
     }
-    
+
     /** Sets given draw callback. */
     set draw(callback: CanvasDrawCallback) {
         this._drawCallback = callback;
@@ -32,7 +32,7 @@ export class SharpCanvasElement extends HTMLElement {
         const canvas = document.createElement("canvas");
         canvas.style.width  = this.style.width;
         canvas.style.height = this.style.height;
-        
+
         return canvas;
     }
 
@@ -58,9 +58,9 @@ export class SharpCanvasElement extends HTMLElement {
             // The canvas content is initialized when the size is updated.
             if (this.draw) this.draw(context, ract);
         });
-        
+
         this.observer.observe(this.raw = this.createRaw());
-        
+
         // Attach the created raw canvas to this element tree.
         const shadow = this.attachShadow({ mode: "closed" });
               shadow.appendChild(this.raw);

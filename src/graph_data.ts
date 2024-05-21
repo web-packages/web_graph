@@ -20,7 +20,7 @@ export class GraphData {
         if (isNaN(value) || typeof value != "number") {
             throw new Error("The value of line graph must always be an number.");
         }
-        
+
         /** @type {GraphDataListener[]} */
         this.listeners = [];
     }
@@ -45,7 +45,7 @@ export class GraphData {
         if (!this.listeners.includes(listener)) {
             throw new Error("A given listener is already not registered.");
         }
-        
+
         this.listeners = this.listeners.filter(e => e !== listener);
     }
 
@@ -61,10 +61,10 @@ export class GraphData {
 export class GraphDataElement extends HTMLElement {
     static observedAttributes = ["key", "value"];
     data: GraphData;
-    
+
     connectedCallback() {
         const key: any = this.getAttribute("key");
-        
+
         const value: number = Number(this.getAttribute("value"));
         if (value == null) {
             throw new Error("Required attribute 'value' not defined in <graph-data> element.");
