@@ -1,34 +1,29 @@
 import { GraphDataState } from "./graph_data_state";
 
+/** Signature for the function that is called when a value of graph-data changes. */
 type GraphDataListener = (value: number) => void;
 
 export class GraphData {
     private _value: number;
-    private listeners: GraphDataListener[];
+    private listeners: GraphDataListener[] = [];
 
     constructor(
-        public key: any,
-        value: number
-    ) {
         /**
          * If the value is null,
          * the graph element identifies the value based on the unique index of the data.
          */
-        this.key = key;
-
+        public key: any,
+        value: number
+    ) {
         this._value = value;
-        if (isNaN(value) || typeof value != "number") {
-            throw new Error("The value of line graph must always be an number.");
-        }
-
-        /** @type {GraphDataListener[]} */
-        this.listeners = [];
     }
 
+    /** Defines the value to given value and notifies the listeners. */
     set value(newValue: number) {
         this.notifyListeners(this._value = newValue);
     }
 
+    /** Returns the value of this graph-data. */
     get value() { return this._value; }
 
     /** Registers a callback that is called when the value is updated.  */
