@@ -28,6 +28,6 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "animatable-js": "^1.2.0-alpha.3"
+    "animatable-js": "^1.2.0-alpha.6"
   }
 }

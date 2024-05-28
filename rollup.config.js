@@ -13,6 +13,7 @@ export default {
     plugins: plugins,
     input: "src/index.ts",
     output: [
-        { file: "dist/index.js", format: "umd", name: "index", sourcemap: true }
+        { file: "dist/index.esm.js", format: "esm", name: "Graph", sourcemap: true },
+        { file: "dist/index.umd.js", format: "umd", name: "Graph", sourcemap: true }
     ],
 }
