@@ -10,6 +10,10 @@ export class GraphDataState implements Animatable { // data class
         public index: number,
     ) {
         this.animation.value = data.value;
+
+        data.addListener(value => {
+            this.animation.animateTo(value);
+        });
     }
 
     addListener(listener: AnimationListener): void {

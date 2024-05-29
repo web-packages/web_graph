@@ -33,8 +33,7 @@ export class LineGraphElement extends GraphElement {
     attach(data: GraphData) {
         const index = this.stateLength;
         const state = new LineGraphDataState(data.createState(index));
-        state.data.addListener((value) => {
-            // change value.
+        state.data.addListener((value) => { // Called when a value updates.
             console.log(state.data.key + " = " + value);
         });
 
@@ -51,7 +50,6 @@ export class LineGraphElement extends GraphElement {
         }
 
         const lineGap = r.width / this.stateLength;
-        console.log(lineGap);
 
         c.beginPath();
         c.strokeStyle = "rgb(0, 100, 255)";

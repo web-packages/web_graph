@@ -1,5 +1,6 @@
 import typescript from "rollup-plugin-typescript2";
 import { terser } from "rollup-plugin-terser";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 const plugins = [
     typescript({
@@ -7,6 +8,7 @@ const plugins = [
         useTsconfigDeclarationDir: true,
     }),
     terser(),
+    nodeResolve(),
 ]
 
 export default {
