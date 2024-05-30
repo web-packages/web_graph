@@ -49,7 +49,8 @@ export class LineGraphElement extends GraphElement {
             throw new Error("The attached graph-data states for a line must be at least one.");
         }
 
-        const lineGap = r.width / this.stateLength;
+        const lineInterval = r.width / this.stateLength;
+        console.log(lineInterval);
 
         c.beginPath();
         c.strokeStyle = "rgb(0, 100, 255)";
@@ -110,6 +111,7 @@ export class LineGraphElement extends GraphElement {
 
         this.observer = new MutationObserver((records, _) => {
             const _handleAttached = (target: GraphDataElement) => {
+                if (target instanceof Element == false) return;
                 if (target instanceof GraphDataElement == false) {
                     throw new Error("The element attached to this element is not a <graph-data> element.");
                 }
@@ -118,6 +120,7 @@ export class LineGraphElement extends GraphElement {
             }
 
             const _handleDetached = (target: GraphDataElement) => {
+                if (target instanceof Element == false) return;
                 if (target instanceof GraphDataElement == false) {
                     throw new Error("The element detached to this element is not a <graph-data> element.");
                 }
