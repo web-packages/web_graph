@@ -5,6 +5,7 @@ import { Animatable, Animation, Curve } from "animatable-js";
 export class GraphDataState implements Animatable { // data class
     private animation = new Animation(1000, Curve.Ease);
 
+    /** Returns the current animation value about a graph-data. */
     get value(): number {
         return this.animation.value;
     }
