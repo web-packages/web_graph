@@ -4,8 +4,8 @@ import { GraphDataState } from "../graph_data_state";
 import { GraphElement } from "./graph";
 
 export class LineGraphDataState extends GraphDataState {
-    constructor(parent: GraphDataState) {
-        super(parent.data, parent.index);
+    constructor(index: number, data: GraphData) {
+        super(data, index);
     }
 
     // 테스트용(임시) 선형 보간 함수
@@ -17,7 +17,8 @@ export class LineGraphDataState extends GraphDataState {
         c: CanvasRenderingContext2D,
         minX: number,
         maxX: number,
-        maxValue: number
+        maxValue: number,
+        // padding: {x: number, y: number}
     ) {
         const width = c.canvas.width;
         const height = c.canvas.height;
@@ -28,7 +29,7 @@ export class LineGraphDataState extends GraphDataState {
     }
 }
 
-export class LineGraphElement extends GraphElement {
+export class LineGraphElement extends GraphElement<LineGraphDataState> {
     states: LineGraphDataState[] = [];
     observer: MutationObserver;
     canvas: SharpCanvasElement;
@@ -40,7 +41,7 @@ export class LineGraphElement extends GraphElement {
 
     attach(data: GraphData) {
         const index = this.stateLength;
-        const state = new LineGraphDataState(data.createState(index));
+        const state = this.createGraphState(index, data);
         state.addListener(_ => { // Called when a value updates.
             this.canvas.redraw();
         });
@@ -79,6 +80,10 @@ export class LineGraphElement extends GraphElement {
         // c.lineTo((r.width / 2) - 15, r.height - 15);
         // c.lineTo(r.width - 15, r.height / 2)
         c.stroke();
+    }
+
+    createGraphState(index: number, data: GraphData): LineGraphDataState {
+        return new LineGraphDataState(index, data);
     }
 
     createCanvas(): SharpCanvasElement {

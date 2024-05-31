@@ -1,5 +1,7 @@
 import { GraphData } from "../graph_data";
-export declare abstract class GraphElement extends HTMLElement {
+import { GraphDataState } from "../graph_data_state";
+export declare abstract class GraphElement<T extends GraphDataState> extends HTMLElement {
     abstract attach(data: GraphData): void;
     abstract detech(data: GraphData): void;
+    abstract createGraphState(index: number, data: GraphData): T;
 }
