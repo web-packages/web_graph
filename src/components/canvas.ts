@@ -6,6 +6,15 @@ export class SharpCanvasElement extends HTMLElement {
 
     raw: HTMLCanvasElement;
     observer: ResizeObserver;
+    redrawId: number;
+
+    redraw() {
+        this.redrawId && cancelAnimationFrame(this.redrawId);
+        this.redrawId = requestAnimationFrame(_ => {
+            console.assert(this.raw !== undefined);
+            this._drawCallback(this.getContext2D(), this.raw.getBoundingClientRect());
+        });
+    }
 
     /** Returns draw callback. */
     get draw(): CanvasDrawCallback {

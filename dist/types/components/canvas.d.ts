@@ -3,6 +3,8 @@ export declare class SharpCanvasElement extends HTMLElement {
     private _drawCallback;
     raw: HTMLCanvasElement;
     observer: ResizeObserver;
+    redrawId: number;
+    redraw(): void;
     get draw(): CanvasDrawCallback;
     set draw(callback: CanvasDrawCallback);
     getContext2D(): CanvasRenderingContext2D;

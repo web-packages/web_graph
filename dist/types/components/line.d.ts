@@ -4,7 +4,8 @@ import { GraphDataState } from "../graph_data_state";
 import { GraphElement } from "./graph";
 export declare class LineGraphDataState extends GraphDataState {
     constructor(parent: GraphDataState);
-    draw(c: CanvasRenderingContext2D, minX: number, maxX: number, maxAmount: number): void;
+    lerp(start: number, end: number, amount: number): number;
+    draw(c: CanvasRenderingContext2D, minX: number, maxX: number, maxValue: number): void;
 }
 export declare class LineGraphElement extends GraphElement {
     states: LineGraphDataState[];

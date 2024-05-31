@@ -8,15 +8,23 @@ export class LineGraphDataState extends GraphDataState {
         super(parent.data, parent.index);
     }
 
+    // 테스트용(임시) 선형 보간 함수
+    lerp(start: number, end: number, amount: number) {
+        return (start + (end - start) * amount);
+    }
+
     draw(
         c: CanvasRenderingContext2D,
         minX: number,
         maxX: number,
-        maxAmount: number
+        maxValue: number
     ) {
         const width = c.canvas.width;
         const height = c.canvas.height;
-        // throw new Error("draw() function not implemented.");
+        const relValue = this.value / maxValue;
+
+        // TODO: 애니메이션 상태를 테스트 하기 위한 임시 로직이므로 이후 해당 로직 전체가 재작성되어야 함.
+        c.lineTo(this.lerp(minX, maxX, 0.5), height * (1 - relValue));
     }
 }
 
@@ -33,8 +41,8 @@ export class LineGraphElement extends GraphElement {
     attach(data: GraphData) {
         const index = this.stateLength;
         const state = new LineGraphDataState(data.createState(index));
-        state.data.addListener((value) => { // Called when a value updates.
-            console.log(state.data.key + " = " + value);
+        state.addListener(_ => { // Called when a value updates.
+            this.canvas.redraw();
         });
 
         this.states.push(state);
@@ -49,17 +57,27 @@ export class LineGraphElement extends GraphElement {
             throw new Error("The attached graph-data states for a line must be at least one.");
         }
 
+        // The distance of between a previous point to a next point.
         const lineInterval = r.width / this.stateLength;
-        console.log(lineInterval);
+        const maxValue = Math.max(...this.states.map(s => s.value));
 
+        c.clearRect(0, 0, c.canvas.width, c.canvas.height);
         c.beginPath();
         c.strokeStyle = "rgb(0, 100, 255)";
         c.lineWidth = 3;
         c.lineCap = "round";
         c.lineJoin = "round";
-        c.moveTo(15, 15);
-        c.lineTo((r.width / 2) - 15, r.height - 15);
-        c.lineTo(r.width - 15, r.height / 2)
+
+        this.states.reduce<number>((value, state) => {
+            const minX = value;
+            const maxX = value + lineInterval;
+            state.draw(c, minX, maxX, maxValue);
+
+            return minX + lineInterval;
+        }, 0);
+
+        // c.lineTo((r.width / 2) - 15, r.height - 15);
+        // c.lineTo(r.width - 15, r.height / 2)
         c.stroke();
     }
 

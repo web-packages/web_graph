@@ -5,6 +5,7 @@ export declare class GraphDataState implements Animatable {
     data: GraphData;
     index: number;
     private animation;
+    get value(): number;
     constructor(data: GraphData, index: number);
     addListener(listener: AnimationListener): void;
     removeListener(listener: AnimationListener): void;

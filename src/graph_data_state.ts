@@ -1,9 +1,13 @@
 import { AnimationListener, AnimationStatusListener } from "animatable-js/dist/types/type";
 import { GraphData } from "./graph_data";
-import { Animatable, Animation } from "animatable-js";
+import { Animatable, Animation, Curve } from "animatable-js";
 
 export class GraphDataState implements Animatable { // data class
-    private animation = new Animation(1000);
+    private animation = new Animation(1000, Curve.Ease);
+    
+    get value(): number {
+        return this.animation.value;
+    }
     
     constructor(
         public data: GraphData,
