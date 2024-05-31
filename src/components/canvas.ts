@@ -7,13 +7,17 @@ export class SharpCanvasElement extends HTMLElement {
     raw: HTMLCanvasElement;
     observer: ResizeObserver;
     redrawId: number;
+    isRedrawing: boolean = false;
 
     redraw() {
-        this.redrawId && cancelAnimationFrame(this.redrawId);
-        this.redrawId = requestAnimationFrame(_ => {
-            console.assert(this.raw !== undefined);
-            this._drawCallback(this.getContext2D(), this.raw.getBoundingClientRect());
-        });
+        if (this.isRedrawing == false) {
+            this.isRedrawing = true;
+            this.redrawId = requestAnimationFrame(_ => {
+                console.assert(this.raw !== undefined);
+                this._drawCallback(this.getContext2D(), this.raw.getBoundingClientRect());
+                this.isRedrawing = false;
+            });
+        }
     }
 
     /** Returns draw callback. */

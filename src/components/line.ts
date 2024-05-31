@@ -77,8 +77,6 @@ export class LineGraphElement extends GraphElement<LineGraphDataState> {
             return minX + lineInterval;
         }, 0);
 
-        // c.lineTo((r.width / 2) - 15, r.height - 15);
-        // c.lineTo(r.width - 15, r.height / 2)
         c.stroke();
     }
 

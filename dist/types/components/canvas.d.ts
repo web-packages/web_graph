@@ -4,6 +4,7 @@ export declare class SharpCanvasElement extends HTMLElement {
     raw: HTMLCanvasElement;
     observer: ResizeObserver;
     redrawId: number;
+    isRedrawing: boolean;
     redraw(): void;
     get draw(): CanvasDrawCallback;
     set draw(callback: CanvasDrawCallback);
