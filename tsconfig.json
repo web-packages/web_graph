@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "lib": ["DOM", "DOM.Iterable", "ES2023"],
         "module": "ES6",
         "target": "ES2015",
         "removeComments": true,
