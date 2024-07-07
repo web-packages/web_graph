@@ -78,7 +78,7 @@ export class GraphDataElement extends HTMLElement {
         oldValue: number,
         newValue: number
     ) {
-        if (oldValue != null && oldValue != newValue) { 
+        if ((oldValue != null || newValue != null) && oldValue != newValue) { 
             if (name == "key") {
                 throw new Error(
                     "The key, which is a unique identifier of the graph data " +
